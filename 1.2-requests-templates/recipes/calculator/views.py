@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
 DATA = {
     'omlet': {
@@ -16,15 +17,42 @@ DATA = {
         'сыр, ломтик': 1,
         'помидор, ломтик': 1,
     },
-    # можете добавить свои рецепты ;)
 }
 
-# Напишите ваш обработчик. Используйте DATA как источник данных
-# Результат - render(request, 'calculator/index.html', context)
-# В качестве контекста должен быть передан словарь с рецептом:
-# context = {
-#   'recipe': {
-#     'ингредиент1': количество1,
-#     'ингредиент2': количество2,
-#   }
-# }
+def index(request):
+    return HttpResponse('Главная страница рецептов: <a href="omlet/">Омлет</a>, <a href="pasta/">Паста</a>, <a href="buter/">Бутерброд</a>')
+
+def omlet(request):
+    servings = int(request.GET.get('servings', 1))
+    context = {
+        'recipe': {
+            'яйца, шт': DATA['omlet']['яйца, шт'] * servings,
+            'молоко, л': DATA['omlet']['молоко, л'] * servings,
+            'соль, ч.л.': DATA['omlet']['соль, ч.л.'] * servings,
+        }
+    }
+    return render(request, 'calculator/index.html', context)
+
+def pasta(request):
+    servings = int(request.GET.get('servings', 1))
+    context = {
+        'recipe': {
+            'макароны, г': DATA['pasta']['макароны, г'] * servings,
+            'сыр, г': DATA['pasta']['сыр, г'] * servings,
+        }
+    }
+    return render(request, 'calculator/index.html', context)
+
+def buter(request):
+    servings = int(request.GET.get('servings', 1))
+    context = {
+        'recipe': {
+            'хлеб, ломтик': DATA['buter']['хлеб, ломтик'] * servings,
+            'колбаса, ломтик': DATA['buter']['колбаса, ломтик'] * servings,
+            'сыр, ломтик': DATA['buter']['сыр, ломтик'] * servings,
+            'помидор, ломтик': DATA['buter']['помидор, ломтик'] * servings,
+        }
+    }
+    return render(request, 'calculator/index.html', context)
+
+
